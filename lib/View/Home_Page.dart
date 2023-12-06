@@ -9,9 +9,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final getDataProvider = Provider.of<GetDataProvider>(context, listen: false);
+    final getDataProvider =
+        Provider.of<GetDataProvider>(context, listen: false);
     getDataProvider.getData();
-
+    double percentage = (getDataProvider.score / getDataProvider.quizList.length) * 100;
     return SafeArea(
       child: Scaffold(
         backgroundColor: bgColor,
@@ -25,13 +26,43 @@ class HomePage extends StatelessWidget {
               );
             } else if (userController.hasMoreQuestions()) {
               final currentQuestion =
-              userController.quizList[userController.currentQuestion];
+                  userController.quizList[userController.currentQuestion];
 
               return Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Container(
+                        width: 317,
+                        height: 27,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(28),
+                            color: const Color(0xff6b2677)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('$percentage' ,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white
+                                  )),
+                            ),
+                            Container(
+                                width: 201,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(28),
+                                    color: const Color(0xffc353d6)))
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     Text(
                       "Question no ${userController.currentQuestion + 1}",
@@ -52,7 +83,8 @@ class HomePage extends StatelessWidget {
                     ),
                     Column(
                       children: currentQuestion.options.map((option) {
-                        bool isSelected = userController.selectedAnswers.contains(option);
+                        bool isSelected =
+                            userController.selectedAnswers.contains(option);
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
@@ -69,8 +101,9 @@ class HomePage extends StatelessWidget {
                                 border: Border.all(
                                   color: isSelected
                                       ? option.isCorrect
-                                      ? Colors.lightGreen
-                                      : Colors.red // Color for wrong answers
+                                          ? Colors.lightGreen
+                                          : Colors
+                                              .red // Color for wrong answers
                                       : txtColor,
                                 ),
                                 color: isSelected && option.isCorrect
@@ -83,9 +116,7 @@ class HomePage extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w300,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : txtColor,
+                                    color: isSelected ? Colors.white : txtColor,
                                   ),
                                 ),
                               ),
@@ -102,7 +133,8 @@ class HomePage extends StatelessWidget {
             }
           },
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
         floatingActionButton: ElevatedButton(
           onPressed: () {
             if (getDataProvider.hasSelectedAnswer()) {
